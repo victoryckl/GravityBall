@@ -11,6 +11,8 @@ public:
 	BaseLayer();
 	~BaseLayer();
 
+	virtual bool init();
+
 	CCSize getWinSize();
 	CCSize getVisibleSize();
 	CCPoint getVisibleOrigin();
