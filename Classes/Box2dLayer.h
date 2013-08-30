@@ -85,6 +85,10 @@ public:
 	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
 	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
 
+	virtual bool MouseDown(const b2Vec2& p);
+	virtual void MouseUp(const b2Vec2& p);
+	void MouseMove(const b2Vec2& p);
+
 public:
 	b2World* m_world;
 	b2Body* m_groundBody;
@@ -93,6 +97,8 @@ public:
 	b2Body* m_bodies[e_count];
 
 	float m_width, m_height;
+	b2MouseJoint* m_mouseJoint;
+	b2Vec2 m_mouseWorld;
 };
 
 #endif // __BOX2D_LAYER_H__
