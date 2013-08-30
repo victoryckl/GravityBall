@@ -55,6 +55,9 @@
     <ClInclude Include="..\Classes\GLES-Render.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\Box2dPhysicsSprite.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -73,6 +76,9 @@
       <Filter>source</Filter>
     </ClCompile>
     <ClCompile Include="..\Classes\GLES-Render.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Classes\Box2dPhysicsSprite.cpp">
       <Filter>source</Filter>
     </ClCompile>
   </ItemGroup>

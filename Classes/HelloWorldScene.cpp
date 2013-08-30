@@ -92,9 +92,9 @@ void HelloWorld::initBox2dLayer()
 	CCPoint visibleOrigin = getVisibleOrigin();
 	CCSize visibleSize = getVisibleSize();
 
-	Box2dLayer * box2dLayer = Box2dLayer::create();
+	Box2dLayer * box2dLayer = Box2dLayer::create(getWinSize().width, getWinSize().height);
 	addChild(box2dLayer, 2, kTagBox2dLayer);
-	box2dLayer->setScale(15);
+	box2dLayer->setScale(1.0);
 	box2dLayer->setAnchorPoint(ccp(0, 0));
 	box2dLayer->setPosition( ccp(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/3) );
 }

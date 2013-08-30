@@ -60,21 +60,30 @@ int32 singleStep;
 enum 
 {
 	kTagBox2dLayer,
-	e_count = 10,
+	e_count = 1,
 };
 
 class Box2dLayer : public BaseLayer
 {
 public:
+	Box2dLayer();
 	~Box2dLayer();
-    virtual bool init();  
+    virtual bool init();
+	bool init(float width, float height);
+    CREATE_FUNC(Box2dLayer);
+	static Box2dLayer * create(float width, float height);
+
 	void initWorld();
 	void initBody();
-    CREATE_FUNC(Box2dLayer);
 
-	void tick(float dt);
+	void update(float dt);
 	void Step(Settings* settings);
 	void draw();
+
+	virtual void registerWithTouchDispatcher();
+	virtual bool ccTouchBegan(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchMoved(CCTouch* touch, CCEvent* event);
+	virtual void ccTouchEnded(CCTouch* touch, CCEvent* event);
 
 public:
 	b2World* m_world;
@@ -82,6 +91,8 @@ public:
 	GLESDebugDraw m_debugDraw;
 
 	b2Body* m_bodies[e_count];
+
+	float m_width, m_height;
 };
 
 #endif // __BOX2D_LAYER_H__
