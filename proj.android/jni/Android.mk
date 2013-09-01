@@ -11,7 +11,8 @@ LOCAL_SRC_FILES := hellocpp/main.cpp \
                    ../../Classes/HelloWorldScene.cpp \
                    ../../Classes/BaseLayer.cpp \
                    ../../Classes/Box2dLayer.cpp \
-                   ../../Classes/GLES-Render.cpp 	
+                   ../../Classes/GLES-Render.cpp \
+				   ../../Classes/Box2dPhysicsSprite.cpp
                    
 LOCAL_C_INCLUDES := $(LOCAL_PATH)/../../Classes                   
 

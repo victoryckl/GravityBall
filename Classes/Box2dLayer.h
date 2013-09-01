@@ -90,6 +90,8 @@ public:
 	virtual void MouseUp(const b2Vec2& p);
 	void MouseMove(const b2Vec2& p);
 
+	virtual void didAccelerate(CCAcceleration* pAccelerationValue);
+
 public:
 	b2World* m_world;
 	b2Body* m_groundBody;

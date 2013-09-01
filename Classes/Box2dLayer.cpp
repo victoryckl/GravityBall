@@ -25,13 +25,14 @@ bool Box2dLayer::init()
     {
         return false;
     }
-
-	setTouchEnabled(true);
-
+	
 	initWorld();
 	initBody();
 
 	scheduleUpdate();
+
+	setTouchEnabled(true);
+	setAccelerometerEnabled(true);
 
     return true;
 }
@@ -109,8 +110,11 @@ void Box2dLayer::initBody()
 {
 	m_mouseJoint = NULL;
 
+	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
+
 	b2CircleShape shape;
-	shape.m_radius = 1.0f;
+	//由图片大小计算半径，保证球的图片大小和box2d中的图形大小一致
+	shape.m_radius = (sprite->getContentSize().width/2)/PTM_RATIO;
 
 	b2FixtureDef fd;
 	fd.shape = &shape;
@@ -125,11 +129,10 @@ void Box2dLayer::initBody()
 	body->CreateFixture(&fd);
 	body->SetLinearVelocity(b2Vec2(50.0f, 10.0f));
 
-	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
 	addChild(sprite);
 	sprite->setBody(body);
 	sprite->setPTMRatio(PTM_RATIO);
-	sprite->setPosition( ccp( -20*PTM_RATIO, (0.0f + PADDING_BOTTOM + 20)*PTM_RATIO) );
+	sprite->setPosition( ccp( -10*PTM_RATIO, (0.0f + PADDING_BOTTOM + 10)*PTM_RATIO) );
 }
 
 void Box2dLayer::Step(Settings* settings)
@@ -277,4 +280,10 @@ void Box2dLayer::MouseMove(const b2Vec2& p)
 	{
 		m_mouseJoint->SetTarget(p);
 	}
+}
+
+void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
+{
+	b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
+	m_world->SetGravity(gravity); 
 }
