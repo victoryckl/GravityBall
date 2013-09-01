@@ -68,11 +68,11 @@ void Box2dLayer::initWorld()
 	m_world->SetDebugDraw(&m_debugDraw);
 
 	uint32 flags = 0;
-	flags += settings.drawShapes            * b2Draw::e_shapeBit;
-	flags += settings.drawJoints            * b2Draw::e_jointBit;
-	flags += settings.drawAABBs            * b2Draw::e_aabbBit;
-	flags += settings.drawPairs            * b2Draw::e_pairBit;
-	flags += settings.drawCOMs               * b2Draw::e_centerOfMassBit;
+	flags += settings.drawShapes * b2Draw::e_shapeBit;
+	flags += settings.drawJoints * b2Draw::e_jointBit;
+	flags += settings.drawAABBs  * b2Draw::e_aabbBit;
+	flags += settings.drawPairs  * b2Draw::e_pairBit;
+	flags += settings.drawCOMs   * b2Draw::e_centerOfMassBit;
 	m_debugDraw.SetFlags(flags);
 
 	b2BodyDef bd;
@@ -112,18 +112,24 @@ void Box2dLayer::initBody()
 	b2CircleShape shape;
 	shape.m_radius = 1.0f;
 
+	b2FixtureDef fd;
+	fd.shape = &shape;
+	fd.density = 1.0f;
+	fd.friction = 0.5f;
+	fd.restitution = 0.5f;
+
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
 
 	b2Body * body = m_world->CreateBody(&bd);
-	body->CreateFixture(&shape, 1.0f);
-	body->SetLinearVelocity(b2Vec2(0.0f, +50.0f));
+	body->CreateFixture(&fd);
+	body->SetLinearVelocity(b2Vec2(50.0f, 10.0f));
 
 	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
 	addChild(sprite);
 	sprite->setBody(body);
 	sprite->setPTMRatio(PTM_RATIO);
-	sprite->setPosition( ccp( 0, 100) );
+	sprite->setPosition( ccp( -20*PTM_RATIO, (0.0f + PADDING_BOTTOM + 20)*PTM_RATIO) );
 }
 
 void Box2dLayer::Step(Settings* settings)
