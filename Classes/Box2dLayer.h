@@ -6,6 +6,7 @@
 
 #include "cocos2d.h"
 #include "BaseLayer.h"
+#include "Box2dPhysicsSprite.h"
 
 
 /// Test settings. Some can be controlled in the GUI.

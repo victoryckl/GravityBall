@@ -2,10 +2,9 @@
 #define __BOX2D_PHYSICS_SPRITE_H__
 
 #include "cocos2d.h"
+#include "GravityBallConfig.h"
 
 USING_NS_CC;
-
-#define PTM_RATIO 32
 
 class b2Body;
 

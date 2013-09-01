@@ -3,6 +3,8 @@
 
 USING_NS_CC;
 
+Settings settings;
+
 Box2dLayer::Box2dLayer()
 {
 	m_width  = 20.0f;
@@ -65,25 +67,41 @@ void Box2dLayer::initWorld()
 
 	m_world->SetDebugDraw(&m_debugDraw);
 
+	uint32 flags = 0;
+	flags += settings.drawShapes            * b2Draw::e_shapeBit;
+	flags += settings.drawJoints            * b2Draw::e_jointBit;
+	flags += settings.drawAABBs            * b2Draw::e_aabbBit;
+	flags += settings.drawPairs            * b2Draw::e_pairBit;
+	flags += settings.drawCOMs               * b2Draw::e_centerOfMassBit;
+	m_debugDraw.SetFlags(flags);
+
 	b2BodyDef bd;
 	m_groundBody = m_world->CreateBody(&bd);
 
 	b2EdgeShape shape;
 
 	// Floor
-	shape.Set(b2Vec2(-m_width/2, 0.0f), b2Vec2(m_width/2, 0.0f));
+	shape.Set(
+		b2Vec2(-m_width/2 + PADDING_LEFT, 0.0f + PADDING_BOTTOM), 
+		b2Vec2(m_width/2 - PADDING_RIGTH, 0.0f + PADDING_BOTTOM));
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Left wall
-	shape.Set(b2Vec2(-m_width/2, 0.0f), b2Vec2(m_width/2, m_height));
+	shape.Set(
+		b2Vec2(-m_width/2 + PADDING_LEFT, 0.0f + PADDING_BOTTOM), 
+		b2Vec2(-m_width/2 + PADDING_LEFT, m_height - PADDING_TOP));
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Right wall
-	shape.Set(b2Vec2(m_width/2, 0.0f), b2Vec2(m_width/2, m_height));
+	shape.Set(
+		b2Vec2(m_width/2 - PADDING_RIGTH, 0.0f + PADDING_BOTTOM), 
+		b2Vec2(m_width/2 - PADDING_RIGTH, m_height - PADDING_TOP));
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Roof
-	shape.Set(b2Vec2(-m_width/2, m_height), b2Vec2(m_width/2, m_height));
+	shape.Set(
+		b2Vec2(-m_width/2 + PADDING_LEFT, m_height - PADDING_TOP), 
+		b2Vec2(m_width/2 - PADDING_RIGTH, m_height - PADDING_TOP));
 	m_groundBody->CreateFixture(&shape, 0.0f);
 }
 
@@ -112,20 +130,8 @@ void Box2dLayer::Step(Settings* settings)
 {
 	float32 timeStep = settings->hz > 0.0f ? 1.0f / settings->hz : float32(0.0f);
 
-	uint32 flags = 0;
-	flags += settings->drawShapes            * b2Draw::e_shapeBit;
-	flags += settings->drawJoints            * b2Draw::e_jointBit;
-	flags += settings->drawAABBs            * b2Draw::e_aabbBit;
-	flags += settings->drawPairs            * b2Draw::e_pairBit;
-	flags += settings->drawCOMs                * b2Draw::e_centerOfMassBit;
-	m_debugDraw.SetFlags(flags);
-
 	m_world->Step(timeStep, settings->velocityIterations, settings->positionIterations);
-
-	m_world->DrawDebugData();
 }
-
-Settings settings;
 
 void Box2dLayer::update(float dt)
 {
@@ -140,13 +146,6 @@ void Box2dLayer::draw()
 
 	kmGLPushMatrix();
 
-	uint32 flags = 0;
-	flags += settings.drawShapes            * b2Draw::e_shapeBit;
-	flags += settings.drawJoints            * b2Draw::e_jointBit;
-	flags += settings.drawAABBs            * b2Draw::e_aabbBit;
-	flags += settings.drawPairs            * b2Draw::e_pairBit;
-	flags += settings.drawCOMs               * b2Draw::e_centerOfMassBit;
-	m_debugDraw.SetFlags(flags);
 	m_world->DrawDebugData();
 
 	kmGLPopMatrix();

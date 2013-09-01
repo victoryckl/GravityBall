@@ -27,7 +27,7 @@
 USING_NS_CC;
 
 GLESDebugDraw::GLESDebugDraw()
-    : mRatio( 1.0f )
+    : mRatio(PTM_RATIO)
 {
     this->initShader();
 }

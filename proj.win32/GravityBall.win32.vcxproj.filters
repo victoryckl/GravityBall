@@ -58,6 +58,9 @@
     <ClInclude Include="..\Classes\Box2dPhysicsSprite.h">
       <Filter>include</Filter>
     </ClInclude>
+    <ClInclude Include="..\Classes\GravityBallConfig.h">
+      <Filter>include</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

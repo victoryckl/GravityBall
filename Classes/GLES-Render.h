@@ -24,6 +24,8 @@
 #include "Box2D/Box2D.h"
 #include "cocos2d.h"
 
+#include "GravityBallConfig.h"
+
 struct b2AABB;
 
 // This class implements debug drawing callbacks that are invoked

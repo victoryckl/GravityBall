@@ -73,7 +73,7 @@ bool HelloWorld::init()
     pSprite->setPosition( ccp(size.width/2, size.height/2) );
 
     // add the sprite as a child to this layer
-    this->addChild(pSprite, 0);
+    //this->addChild(pSprite, 0);
     
     return true;
 }
@@ -95,6 +95,6 @@ void HelloWorld::initBox2dLayer()
 	Box2dLayer * box2dLayer = Box2dLayer::create(getWinSize().width, getWinSize().height);
 	addChild(box2dLayer, 2, kTagBox2dLayer);
 	box2dLayer->setScale(1.0);
-	box2dLayer->setAnchorPoint(ccp(0, 0));
-	box2dLayer->setPosition( ccp(visibleOrigin.x+visibleSize.width/2, visibleOrigin.y+visibleSize.height/3) );
+	box2dLayer->setAnchorPoint(ccp(0.5, 0));
+	box2dLayer->setPosition( ccp(getWinSize().width/2, 0) );
 }

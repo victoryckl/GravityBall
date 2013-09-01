@@ -137,6 +137,7 @@
     <ClInclude Include="..\Classes\Box2dLayer.h" />
     <ClInclude Include="..\Classes\Box2dPhysicsSprite.h" />
     <ClInclude Include="..\Classes\GLES-Render.h" />
+    <ClInclude Include="..\Classes\GravityBallConfig.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
     <ClInclude Include="main.h" />
     <ClInclude Include="resource.h" />
