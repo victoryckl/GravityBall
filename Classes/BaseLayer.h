@@ -5,6 +5,10 @@
 
 USING_NS_CC;
 
+enum {
+	kTagMainScene = 1,
+};
+
 class BaseLayer : public CCLayer
 {
 public:
@@ -18,6 +22,9 @@ public:
 	CCPoint getVisibleOrigin();
 
 	void setBackgroundImage( const char* back_image_name );
+
+	virtual void keyBackClicked();
+	virtual void keyMenuClicked();
 };
 
 #endif // __BASE_LAYER_H__

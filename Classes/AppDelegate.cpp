@@ -28,6 +28,7 @@ bool AppDelegate::applicationDidFinishLaunching()
 
     // create a scene. it's an autorelease object
     CCScene *pScene = HelloWorldScene::create();
+	pScene->setTag(kTagMainScene);
 
 	// run
     pDirector->runWithScene(pScene);

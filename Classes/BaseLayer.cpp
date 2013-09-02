@@ -39,3 +39,23 @@ void BaseLayer::setBackgroundImage( const char* back_image_name )
 	sp->setPosition( ccp( getWinSize().width / 2 , getWinSize().height / 2 ) );
 	addChild( sp );
 }
+
+void BaseLayer::keyBackClicked()
+{
+	CCLOG("key: Back");
+	int iManSceneTag = CCDirector::sharedDirector()->getRunningScene()->getTag();//如果是主场景，则退出
+	if (kTagMainScene == iManSceneTag)
+	{
+		CCDirector::sharedDirector()->end();
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+		exit(0);
+#endif
+	}
+
+
+}
+
+void BaseLayer::keyMenuClicked()
+{
+	CCLOG("key: Menu");
+}

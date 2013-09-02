@@ -32,6 +32,7 @@ bool Box2dLayer::init()
 	scheduleUpdate();
 
 	setTouchEnabled(true);
+	setKeypadEnabled(true);
 	setAccelerometerEnabled(true);
 
     return true;
@@ -288,6 +289,9 @@ void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 	b2Vec2 gravity(-pAccelerationValue->y * 30, pAccelerationValue->x * 30);
 	//phone
 	//b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
+
+	//CCLOG("gravity x:%.2f, y:%.2f", gravity.x, gravity.y);
+
 	m_world->SetGravity(gravity);
 
 	b2Body* bodyList = m_world->GetBodyList();
@@ -296,3 +300,5 @@ void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 		b->SetAwake(true);
 	}
 }
+
+
