@@ -64,6 +64,20 @@ enum
 	e_count = 1,
 };
 
+class Box2dLayer;
+
+// This is called when a joint in the world is implicitly destroyed
+// because an attached body is destroyed. This gives us a chance to
+// nullify the mouse joint.
+class DestructionListener : public b2DestructionListener
+{
+public:
+	void SayGoodbye(b2Fixture* fixture) { B2_NOT_USED(fixture); }
+	void SayGoodbye(b2Joint* joint);
+
+	Box2dLayer * box2dlayer;
+};
+
 class Box2dLayer : public BaseLayer
 {
 public:
@@ -92,6 +106,8 @@ public:
 
 	virtual void didAccelerate(CCAcceleration* pAccelerationValue);
 
+	virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
+
 public:
 	b2World* m_world;
 	b2Body* m_groundBody;
@@ -102,6 +118,8 @@ public:
 	float m_width, m_height;
 	b2MouseJoint* m_mouseJoint;
 	b2Vec2 m_mouseWorld;
+
+	DestructionListener m_destructionListener;
 };
 
 #endif // __BOX2D_LAYER_H__

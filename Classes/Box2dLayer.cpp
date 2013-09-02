@@ -5,6 +5,18 @@ USING_NS_CC;
 
 Settings settings;
 
+void DestructionListener::SayGoodbye(b2Joint* joint)
+{
+	if (box2dlayer->m_mouseJoint == joint)
+	{
+		box2dlayer->m_mouseJoint = NULL;
+	}
+	else
+	{
+		box2dlayer->JointDestroyed(joint);
+	}
+}
+
 Box2dLayer::Box2dLayer()
 {
 	m_width  = 20.0f;
@@ -67,6 +79,8 @@ void Box2dLayer::initWorld()
 	gravity.Set(0.0f, -10.0f);
 	m_world = new b2World(gravity);
 
+	m_destructionListener.box2dlayer = this;
+	m_world->SetDestructionListener(&m_destructionListener);
 	m_world->SetDebugDraw(&m_debugDraw);
 
 	uint32 flags = 0;
@@ -285,8 +299,12 @@ void Box2dLayer::MouseMove(const b2Vec2& p)
 
 void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 {
+	//H9
+	b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
+
 	//H15
-	b2Vec2 gravity(-pAccelerationValue->y * 30, pAccelerationValue->x * 30);
+	//b2Vec2 gravity(-pAccelerationValue->y * 30, pAccelerationValue->x * 30);
+
 	//phone
 	//b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
 
