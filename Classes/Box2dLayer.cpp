@@ -284,6 +284,15 @@ void Box2dLayer::MouseMove(const b2Vec2& p)
 
 void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 {
-	b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
-	m_world->SetGravity(gravity); 
+	//H15
+	b2Vec2 gravity(-pAccelerationValue->y * 30, pAccelerationValue->x * 30);
+	//phone
+	//b2Vec2 gravity(pAccelerationValue->x * 30, pAccelerationValue->y * 30);
+	m_world->SetGravity(gravity);
+
+	b2Body* bodyList = m_world->GetBodyList();
+	for (b2Body* b = bodyList; b; b = b->GetNext())
+	{
+		b->SetAwake(true);
+	}
 }
