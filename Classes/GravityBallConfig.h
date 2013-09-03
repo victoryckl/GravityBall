@@ -5,7 +5,7 @@
 
 #define PADDING_LEFT   1
 #define PADDING_TOP    5
-#define PADDING_RIGTH  15
+#define PADDING_RIGTH  12
 #define PADDING_BOTTOM 4
 
 #endif // __GRAVITY_BALL_CONFIG_H__
