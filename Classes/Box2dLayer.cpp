@@ -39,7 +39,8 @@ bool Box2dLayer::init()
     }
 	
 	initWorld();
-	initBody();
+	initMaze();
+	initBall();
 
 	scheduleUpdate();
 
@@ -96,40 +97,61 @@ void Box2dLayer::initWorld()
 
 	b2EdgeShape shape;
 
+	box.x = -m_width/2 + PADDING_LEFT;
+	box.y = 0.0f + PADDING_BOTTOM;
+	box.w = m_width - PADDING_RIGTH - PADDING_LEFT;
+	box.h = m_height - PADDING_TOP - PADDING_BOTTOM;
+
 	// Floor
-	shape.Set(
-		b2Vec2(-m_width/2 + PADDING_LEFT, 0.0f + PADDING_BOTTOM), 
-		b2Vec2(m_width/2 - PADDING_RIGTH, 0.0f + PADDING_BOTTOM));
+	shape.Set( b2Vec2(box.x, box.y), b2Vec2(box.x+box.w, box.y) );
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Left wall
-	shape.Set(
-		b2Vec2(-m_width/2 + PADDING_LEFT, 0.0f + PADDING_BOTTOM), 
-		b2Vec2(-m_width/2 + PADDING_LEFT, m_height - PADDING_TOP));
+	shape.Set( b2Vec2(box.x, box.y), b2Vec2(box.x, box.y+box.h) );
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Right wall
-	shape.Set(
-		b2Vec2(m_width/2 - PADDING_RIGTH, 0.0f + PADDING_BOTTOM), 
-		b2Vec2(m_width/2 - PADDING_RIGTH, m_height - PADDING_TOP));
+	shape.Set( b2Vec2(box.x+box.w, box.y), b2Vec2(box.x+box.w, box.y+box.h) );
 	m_groundBody->CreateFixture(&shape, 0.0f);
 
 	// Roof
-	shape.Set(
-		b2Vec2(-m_width/2 + PADDING_LEFT, m_height - PADDING_TOP), 
-		b2Vec2(m_width/2 - PADDING_RIGTH, m_height - PADDING_TOP));
+	shape.Set( b2Vec2(box.x, box.y+box.h), b2Vec2(box.x+box.w, box.y+box.h) );
 	m_groundBody->CreateFixture(&shape, 0.0f);
 }
 
-void Box2dLayer::initBody()
+void Box2dLayer::initMaze()
+{
+	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
+	float32 boxW = sprite->getContentSize().width/PTM_RATIO;
+
+	float32 x = box.x+box.w - boxW;
+	float32 y = box.y+box.h - boxW*2;
+	createBox(x, y);
+	x -= boxW;
+	createBox(x, y);
+
+	x -= boxW * 3;
+	createBox(x, y);
+	x -= boxW ;
+	createBox(x, y);
+	x -= boxW ;
+	createBox(x, y);
+	x -= boxW ;
+	createBox(x, y);
+
+	createBox(-10*PTM_RATIO + 90, (0.0f + PADDING_BOTTOM + 10)*PTM_RATIO);
+}
+
+void Box2dLayer::initBall()
 {
 	m_mouseJoint = NULL;
 
 	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
+	float32 half = (sprite->getContentSize().width/2)/PTM_RATIO;
 
 	b2CircleShape shape;
 	//由图片大小计算半径，保证球的图片大小和box2d中的图形大小一致
-	shape.m_radius = (sprite->getContentSize().width/2)/PTM_RATIO;
+	shape.m_radius = half;
 
 	b2FixtureDef fd;
 	fd.shape = &shape;
@@ -142,12 +164,46 @@ void Box2dLayer::initBody()
 
 	b2Body * body = m_world->CreateBody(&bd);
 	body->CreateFixture(&fd);
-	body->SetLinearVelocity(b2Vec2(50.0f, 10.0f));
+	//body->SetLinearVelocity(b2Vec2(50.0f, 10.0f));
 
 	addChild(sprite);
 	sprite->setBody(body);
 	sprite->setPTMRatio(PTM_RATIO);
-	sprite->setPosition( ccp( -10*PTM_RATIO, (0.0f + PADDING_BOTTOM + 10)*PTM_RATIO) );
+	sprite->setPosition( ccp((m_width/2 - PADDING_RIGTH)*PTM_RATIO - half, (m_height - PADDING_TOP)*PTM_RATIO - half) );
+}
+
+void Box2dLayer::createBox(float x, float y)
+{
+	b2BodyDef bd;
+	b2Body * body = m_world->CreateBody(&bd);
+
+	Box2dPhysicsSprite * sprite = Box2dPhysicsSprite::create("box.png");
+	b2PolygonShape bShape;
+	float32 half = (sprite->getContentSize().width/2)/PTM_RATIO;
+	bShape.SetAsBox(half, half);
+	body->CreateFixture(&bShape, 0.0f);
+
+	addChild(sprite);
+	sprite->setBody(body);
+	sprite->setPTMRatio(PTM_RATIO);
+	sprite->setPosition( ccp(x*PTM_RATIO, y*PTM_RATIO) );
+}
+
+void Box2dLayer::createCircle(float x, float y)
+{
+	b2BodyDef bd;
+	b2Body * body = m_world->CreateBody(&bd);
+
+	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("circle.png");
+	float32 half = (sprite->getContentSize().width/2)/PTM_RATIO;
+	b2CircleShape cShape;
+	cShape.m_radius = half;
+	body->CreateFixture(&cShape, 0.0f);
+
+	addChild(sprite);
+	sprite->setBody(body);
+	sprite->setPTMRatio(PTM_RATIO);
+	sprite->setPosition( ccp(x, y) );
 }
 
 void Box2dLayer::Step(Settings* settings)

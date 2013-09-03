@@ -89,7 +89,11 @@ public:
 	static Box2dLayer * create(float width, float height);
 
 	void initWorld();
-	void initBody();
+	void initMaze();
+	void initBall();
+
+	void createBox(float x, float y);
+	void createCircle(float x, float y);
 
 	void update(float dt);
 	void Step(Settings* settings);
@@ -120,6 +124,10 @@ public:
 	b2Vec2 m_mouseWorld;
 
 	DestructionListener m_destructionListener;
+
+	struct {
+		float32 x,y,w,h;
+	}box;
 };
 
 #endif // __BOX2D_LAYER_H__
