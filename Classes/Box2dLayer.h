@@ -112,6 +112,9 @@ public:
 
 	virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
 
+	//"0,0 0,448 64,448 64,576" -> ccCArray points
+	ccCArray * tokenizerPoints(CCString* pointsStr);
+
 public:
 	b2World* m_world;
 	b2Body* m_groundBody;
@@ -128,6 +131,13 @@ public:
 	struct {
 		float32 x,y,w,h;
 	}box;
+
+	CCTMXTiledMap * m_pMap;
+	CCTMXObjectGroup* m_pGroup;
+	CCArray* m_pObjects;
+	CCDictionary* m_pDict;
+	CCObject* m_pObj;
+	ccCArray * m_pPoints;
 };
 
 #endif // __BOX2D_LAYER_H__

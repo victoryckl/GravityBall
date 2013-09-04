@@ -82,12 +82,12 @@ bool HelloWorld::init()
     this->addChild(pLabel, 1);
 
     // add bg
-    CCSprite* pSprite = CCSprite::create("bg.png");
-	pSprite->setScaleX(1.57f);
-	pSprite->setScaleY(2.1f);
-	pSprite->setAnchorPoint(ccp(0, 0));
-    pSprite->setPosition(ccp(0+PADDING_LEFT*PTM_RATIO - 10, 0+PADDING_BOTTOM*PTM_RATIO - 34));
-	this->addChild(pSprite, 0);
+    //CCSprite* pSprite = CCSprite::create("bg.png");
+	//pSprite->setScaleX(1.57f);
+	//pSprite->setScaleY(2.1f);
+	//pSprite->setAnchorPoint(ccp(0, 0));
+    //pSprite->setPosition(ccp(0+PADDING_LEFT*PTM_RATIO - 10, 0+PADDING_BOTTOM*PTM_RATIO - 34));
+	//this->addChild(pSprite, 0);
 
     return true;
 }

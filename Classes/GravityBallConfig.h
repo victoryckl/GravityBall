@@ -1,7 +1,7 @@
 #ifndef __GRAVITY_BALL_CONFIG_H__
 #define __GRAVITY_BALL_CONFIG_H__
 
-#define PTM_RATIO 20
+#define PTM_RATIO 32
 
 #define PADDING_LEFT   1
 #define PADDING_TOP    5

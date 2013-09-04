@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="32" height="23" tilewidth="32" tileheight="32">
+ <tileset firstgid="1" name="tileds" tilewidth="32" tileheight="32" spacing="1" margin="1">
+  <image source="tileds.png" width="265" height="199"/>
+ </tileset>
+ <layer name="background" width="32" height="23">
+  <data encoding="base64" compression="zlib">
+   eJztlM0OgjAQhBFPxpN/B0WJxmjVqvH9n44l6Sabya62BQ9GDl+gC+0s06F1URT1wN+yJOZfYhWhP03odU1UhAtw/WzcTzL1WQfrB+JObAIVzMF6rv6V8MRLqd8E3njmO+p/8iGGSw/66IPc8/2bPnmcqv8EDdxbzYs2b20ujkrfKfoyP6jFeyv3W77/AP2c/Mv8nIz1rCxa76f678TaPmIug/7n6mtgHjhbMnPYr8vUxwxYWfCGR/gfpOrj+aKdMxqsiz314X8Mmhex58+WKIlxGI/CuMysS3YJ37AI11nH+sBv0QANvlMD
+  </data>
+ </layer>
+ <objectgroup name="object" width="32" height="23">
+  <object x="15" y="143">
+   <polyline points="0,0 0,448 64,448 64,576 128,576 128,448 256,448 256,576 320,576 320,448 448,448 448,576 512,576 512,448 736,448 736,0 0,0"/>
+  </object>
+ </objectgroup>
+</map>

@@ -21,12 +21,16 @@ Box2dLayer::Box2dLayer()
 {
 	m_width  = 20.0f;
 	m_height = 20.0f;
+
+	m_pPoints = ccCArrayNew(16);
 }
 
 Box2dLayer::~Box2dLayer()
 {
 	delete m_world;
 	m_world = NULL;
+
+	ccCArrayFree(m_pPoints);
 }
 
 bool Box2dLayer::init()
@@ -140,6 +144,41 @@ void Box2dLayer::initMaze()
 	createBox(x, y);
 
 	createBox(-10*PTM_RATIO + 90, (0.0f + PADDING_BOTTOM + 10)*PTM_RATIO);
+
+	
+// 	m_pMap = CCTMXTiledMap::create("map-1024x736.tmx");
+// 	map->setAnchorPoint(ccp(0.5, 0));
+// 	map->setPosition(ccp(box.x,box.y));
+// 	addChild(map, -1);
+
+	m_pMap = CCTMXTiledMap::create("map-1024x736.tmx");
+	m_pGroup = m_pMap->objectGroupNamed("object");
+	m_pObjects = m_pGroup->getObjects();
+	m_pDict = NULL;
+	m_pObj = NULL;
+
+	//循环查找所有object
+	CCARRAY_FOREACH(m_pObjects, m_pObj)
+	{
+		m_pDict = (CCDictionary*)m_pObj;
+		//保存值的时候需要同时保存X Y 和polyline 的 points XY为所画多边形的起始点
+		//查找X Y 值
+		const char* key = "x";
+		int x = ((CCString*)m_pDict->objectForKey(key))->intValue();
+		key = "y";
+		int y = ((CCString*)m_pDict->objectForKey(key))->intValue();
+
+		key = "polyline";
+		// 如果名字为 “polyline” 读取并保存points值
+		CCString* s_points = (CCString*)m_pDict->objectForKey(key);
+		if (s_points != NULL) {
+			CCLOG("polyline x:%d, y:%d", x, y);
+			tokenizerPoints(s_points);
+		} else {
+			CCLOG("object x:%d, y:%d", x, y);
+		}
+	}
+
 }
 
 void Box2dLayer::initBall()
@@ -375,4 +414,31 @@ void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 	}
 }
 
+//"0,0 0,448 64,448 64,576" -> CCArray points
+ccCArray * Box2dLayer::tokenizerPoints(CCString* pointsStr)
+{
+	ccCArray * points = m_pPoints;
+	int x=0, y=0;
+	const char * str = pointsStr->getCString();
+	int h = m_pMap->getTileSize().height * m_pMap->getMapSize().height;
 
+	cocos2d::ccCArrayRemoveAllValues(points);
+	while (str) {
+		if (2 != std::sscanf(str, "%d,%d", &x, &y)) {
+			CCLOG("sscanf not match %d,%d");
+			break;
+		}
+		y = h - y;
+		CCLOG("(%d,%d),", x, y);
+		
+		ccCArrayAppendValue(points, (void*)x);
+		ccCArrayAppendValue(points, (void*)y);
+
+		str = std::strchr(str, ' ');
+		if (str) {
+			str++;//' '
+		}
+	}
+
+	return points;
+}
