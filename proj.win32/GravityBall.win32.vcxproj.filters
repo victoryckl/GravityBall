@@ -84,5 +84,8 @@
     <ClCompile Include="..\Classes\Box2dPhysicsSprite.cpp">
       <Filter>source</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\cocos2dx\support\data_support\ccCArray.cpp">
+      <Filter>source</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

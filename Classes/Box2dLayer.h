@@ -113,7 +113,9 @@ public:
 	virtual void JointDestroyed(b2Joint* joint) { B2_NOT_USED(joint); }
 
 	//"0,0 0,448 64,448 64,576" -> ccCArray points
-	ccCArray * tokenizerPoints(CCString* pointsStr);
+	ccCArray * tokenizerPoints(int baseX, int baseY, CCString* pointsStr);
+
+	void createPolyline(ccCArray * pArray);
 
 public:
 	b2World* m_world;

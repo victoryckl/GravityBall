@@ -152,6 +152,10 @@ void Box2dLayer::initMaze()
 // 	addChild(map, -1);
 
 	m_pMap = CCTMXTiledMap::create("map-1024x736.tmx");
+	//m_pMap->setAnchorPoint(ccp(0.5, 0));
+	//m_pMap->setPosition(ccp(box.x, box.y));
+	addChild(m_pMap, -1);
+
 	m_pGroup = m_pMap->objectGroupNamed("object");
 	m_pObjects = m_pGroup->getObjects();
 	m_pDict = NULL;
@@ -173,7 +177,8 @@ void Box2dLayer::initMaze()
 		CCString* s_points = (CCString*)m_pDict->objectForKey(key);
 		if (s_points != NULL) {
 			CCLOG("polyline x:%d, y:%d", x, y);
-			tokenizerPoints(s_points);
+			tokenizerPoints(x, y, s_points);
+			createPolyline(m_pPoints);
 		} else {
 			CCLOG("object x:%d, y:%d", x, y);
 		}
@@ -415,20 +420,21 @@ void Box2dLayer::didAccelerate(CCAcceleration* pAccelerationValue)
 }
 
 //"0,0 0,448 64,448 64,576" -> CCArray points
-ccCArray * Box2dLayer::tokenizerPoints(CCString* pointsStr)
+ccCArray * Box2dLayer::tokenizerPoints(int baseX, int baseY, CCString* pointsStr)
 {
 	ccCArray * points = m_pPoints;
 	int x=0, y=0;
 	const char * str = pointsStr->getCString();
 	int h = m_pMap->getTileSize().height * m_pMap->getMapSize().height;
 
-	cocos2d::ccCArrayRemoveAllValues(points);
+	ccCArrayRemoveAllValues(points);
 	while (str) {
 		if (2 != std::sscanf(str, "%d,%d", &x, &y)) {
 			CCLOG("sscanf not match %d,%d");
 			break;
 		}
-		y = h - y;
+		x += baseX;
+		y = baseY - y ;
 		CCLOG("(%d,%d),", x, y);
 		
 		ccCArrayAppendValue(points, (void*)x);
@@ -441,4 +447,21 @@ ccCArray * Box2dLayer::tokenizerPoints(CCString* pointsStr)
 	}
 
 	return points;
+}
+
+void Box2dLayer::createPolyline(ccCArray * pArray)
+{
+	int num = pArray->num;
+
+	b2EdgeShape shape;
+
+	for (int i=0; i<num-2; i+=2) {
+		CCLOG("(%d,%d)->(%d,%d)", 
+			(int)pArray->arr[i], (int)pArray->arr[i+1], 
+			(int)pArray->arr[i+2], (int)pArray->arr[i+3]);
+		shape.Set(
+			b2Vec2((int)(pArray->arr[i])*1.0/PTM_RATIO, (int)(pArray->arr[i+1])*1.0/PTM_RATIO), 
+			b2Vec2((int)(pArray->arr[i+2])*1.0/PTM_RATIO, (int)(pArray->arr[i+3])*1.0/PTM_RATIO));
+		m_groundBody->CreateFixture(&shape, 0.0f);
+	}
 }

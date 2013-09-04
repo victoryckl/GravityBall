@@ -53,9 +53,9 @@ void HelloWorldScene::addBox2dLayer()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	Box2dLayer * box2dLayer = Box2dLayer::create(size.width, size.height);
 	addChild(box2dLayer, 2, kTagBox2dLayer);
-	box2dLayer->setScale(1.0);
-	box2dLayer->setAnchorPoint(ccp(0.5, 0));
-	box2dLayer->setPosition( ccp(size.width/2, 0) );
+	//box2dLayer->setScale(1.0);
+	//box2dLayer->setAnchorPoint(ccp(0.5, 0));
+	//box2dLayer->setPosition( ccp(size.width/2, 0) );
 }
 
 // on "init" you need to initialize your instance
