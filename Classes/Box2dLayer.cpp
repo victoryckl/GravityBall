@@ -116,20 +116,41 @@ void Box2dLayer::initMaze()
 		m_pDict = (CCDictionary*)m_pObj;
 		//保存值的时候需要同时保存X Y 和polyline 的 points XY为所画多边形的起始点
 		//查找X Y 值
-		const char* key = "x";
-		int x = ((CCString*)m_pDict->objectForKey(key))->intValue();
-		key = "y";
-		int y = ((CCString*)m_pDict->objectForKey(key))->intValue();
+		//int x = ((CCString*)m_pDict->objectForKey("x"))->intValue();
+		//int y = ((CCString*)m_pDict->objectForKey("y"))->intValue();
 
-		key = "polyline";
 		// 如果名字为 “polyline” 读取并保存points值
-		CCString* s_points = (CCString*)m_pDict->objectForKey(key);
-		if (s_points != NULL) {
-			CCLOG("polyline x:%d, y:%d", x, y);
-			tokenizerPoints(x, y, s_points);
-			createPolyline(m_pPoints);
-		} else {
-			CCLOG("object x:%d, y:%d", x, y);
+// 		CCString* s_points = (CCString*)m_pDict->objectForKey("polyline");
+// 		if (s_points != NULL) {
+// 			CCLOG("polyline x:%d, y:%d", x, y);
+// 			tokenizerPoints(x, y, s_points);
+// 			createPolyline(m_pPoints);
+// 		} else {
+// 			CCLOG("object x:%d, y:%d", x, y);
+// 		}
+		CCArray * points = (CCArray *)m_pDict->objectForKey("points");
+		CCDictionary* dict = NULL;
+
+		b2EdgeShape shape;
+		if (points && points->count() > 0) {
+			for(CCObject** arr = points->data->arr, **end = points->data->arr + points->count()-2;
+				arr <= end && ((dict = (CCDictionary*)*arr) != NULL);
+				arr++)
+			{
+				int x1 = dict->valueForKey("x")->intValue();
+				int y1 = dict->valueForKey("y")->intValue();
+
+				dict = (CCDictionary*)*(arr+1);
+				int x2 = dict->valueForKey("x")->intValue();
+				int y2 = dict->valueForKey("y")->intValue();
+
+				CCLOG("(%d,%d)->(%d,%d)", x1, y1, x2, y2);
+
+				shape.Set(
+					b2Vec2(x1*1.0/PTM_RATIO, y1*1.0/PTM_RATIO), 
+					b2Vec2(x2*1.0/PTM_RATIO, y2*1.0/PTM_RATIO));
+				m_groundBody->CreateFixture(&shape, 0.0f);
+			}
 		}
 	}
 }
