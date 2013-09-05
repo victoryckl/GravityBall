@@ -675,19 +675,76 @@ void CCTMXMapInfo::startElement(void *ctx, const char *name, const char **atts)
     } 
     else if (elementName == "polyline")
     {
-		CCTMXObjectGroup* objectGrounp = (CCTMXObjectGroup*)pTMXMapInfo->getObjectGroups()->lastObject();
-		CCDictionary* dict = (CCDictionary*)objectGrounp->getObjects()->lastObject();
-
-		const char* val = valueForKey("points", attributeDict);
-		CCString* obj = new CCString(val);
-
-		dict->setObject(obj, "polyline");
-		obj->release();
-
+// 		CCTMXObjectGroup* objectGroup = (CCTMXObjectGroup*)pTMXMapInfo->getObjectGroups()->lastObject();
+// 		CCDictionary* dict = (CCDictionary*)objectGroup->getObjects()->lastObject();
+// 
+// 		const char* val = valueForKey("points", attributeDict);
+// 		CCString* obj = new CCString(val);
+// 
+// 		dict->setObject(obj, "polyline");
+// 		obj->release();
         // find parent object's dict and add polyline-points to it
         // CCTMXObjectGroup* objectGroup = (CCTMXObjectGroup*)m_pObjectGroups->lastObject();
         // CCDictionary* dict = (CCDictionary*)objectGroup->getObjects()->lastObject();
         // TODO: dict->setObject:[attributeDict objectForKey:@"points"] forKey:@"polylinePoints"];
+
+		// find parent object's dict and add polyline-points to it
+		CCTMXObjectGroup* objectGroup = (CCTMXObjectGroup*)m_pObjectGroups->lastObject();
+		CCDictionary* dict = (CCDictionary*)objectGroup->getObjects()->lastObject();
+
+		int objX = dict->valueForKey("x")->intValue();
+		int objY = dict->valueForKey("y")->intValue();
+
+		CCLOG("objX:%d, objY:%d", objX, objY);
+
+		// get points value string
+		const char* value = valueForKey("points", attributeDict);
+		if(value)
+		{
+			CCArray* pPointsArray = new CCArray;
+
+			// parse points string into a space-separated set of points
+			stringstream pointsStream(value);
+			string pointPair;
+			while(std::getline(pointsStream, pointPair, ' '))
+			{
+				// parse each point combo into a comma-separated x,y point
+				stringstream pointStream(pointPair);
+				string xStr,yStr;
+				char buffer[32] = {0};
+
+				CCDictionary* pPointDict = new CCDictionary;
+
+				// set x
+				if(std::getline(pointStream, xStr, ','))
+				{
+					//int x = atoi(xStr.c_str()) + (int)objectGroup->getPositionOffset().x;
+					int x = objX + atoi(xStr.c_str());
+					sprintf(buffer, "%d", x);
+					CCString* pStr = new CCString(buffer);
+					pStr->autorelease();
+					pPointDict->setObject(pStr, "x");
+				}
+
+				// set y
+				if(std::getline(pointStream, yStr, ','))
+				{
+					//int y = atoi(yStr.c_str()) + (int)objectGroup->getPositionOffset().y;
+					int y = objY - atoi(yStr.c_str());
+					sprintf(buffer, "%d", y);
+					CCString* pStr = new CCString(buffer);
+					pStr->autorelease();
+					pPointDict->setObject(pStr, "y");
+				}
+
+				// add to points array
+				pPointsArray->addObject(pPointDict);
+				pPointDict->release();
+			}
+
+			dict->setObject(pPointsArray, "points");
+			pPointsArray->release();
+		}
     }
 
     if (attributeDict)
