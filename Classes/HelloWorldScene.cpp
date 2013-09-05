@@ -53,9 +53,6 @@ void HelloWorldScene::addBox2dLayer()
 	CCSize size = CCDirector::sharedDirector()->getWinSize();
 	Box2dLayer * box2dLayer = Box2dLayer::create(size.width, size.height);
 	addChild(box2dLayer, 2, kTagBox2dLayer);
-	//box2dLayer->setScale(1.0);
-	//box2dLayer->setAnchorPoint(ccp(0.5, 0));
-	//box2dLayer->setPosition( ccp(size.width/2, 0) );
 }
 
 // on "init" you need to initialize your instance
@@ -80,14 +77,6 @@ bool HelloWorld::init()
     pLabel->setPosition( ccp((size.width - 60) / 2, size.height - 40) );
     // add the label as a child to this layer
     this->addChild(pLabel, 1);
-
-    // add bg
-    //CCSprite* pSprite = CCSprite::create("bg.png");
-	//pSprite->setScaleX(1.57f);
-	//pSprite->setScaleY(2.1f);
-	//pSprite->setAnchorPoint(ccp(0, 0));
-    //pSprite->setPosition(ccp(0+PADDING_LEFT*PTM_RATIO - 10, 0+PADDING_BOTTOM*PTM_RATIO - 34));
-	//this->addChild(pSprite, 0);
 
     return true;
 }

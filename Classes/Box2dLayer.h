@@ -130,10 +130,6 @@ public:
 
 	DestructionListener m_destructionListener;
 
-	struct {
-		float32 x,y,w,h;
-	}box;
-
 	CCTMXTiledMap * m_pMap;
 	CCTMXObjectGroup* m_pGroup;
 	CCArray* m_pObjects;

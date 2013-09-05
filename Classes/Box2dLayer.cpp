@@ -98,62 +98,11 @@ void Box2dLayer::initWorld()
 
 	b2BodyDef bd;
 	m_groundBody = m_world->CreateBody(&bd);
-
-	b2EdgeShape shape;
-
-	box.x = -m_width/2 + PADDING_LEFT;
-	box.y = 0.0f + PADDING_BOTTOM;
-	box.w = m_width - PADDING_RIGTH - PADDING_LEFT;
-	box.h = m_height - PADDING_TOP - PADDING_BOTTOM;
-
-	// Floor
-	shape.Set( b2Vec2(box.x, box.y), b2Vec2(box.x+box.w, box.y) );
-	m_groundBody->CreateFixture(&shape, 0.0f);
-
-	// Left wall
-	shape.Set( b2Vec2(box.x, box.y), b2Vec2(box.x, box.y+box.h) );
-	m_groundBody->CreateFixture(&shape, 0.0f);
-
-	// Right wall
-	shape.Set( b2Vec2(box.x+box.w, box.y), b2Vec2(box.x+box.w, box.y+box.h) );
-	m_groundBody->CreateFixture(&shape, 0.0f);
-
-	// Roof
-	shape.Set( b2Vec2(box.x, box.y+box.h), b2Vec2(box.x+box.w, box.y+box.h) );
-	m_groundBody->CreateFixture(&shape, 0.0f);
 }
 
 void Box2dLayer::initMaze()
 {
-	Box2dPhysicsSprite *sprite = Box2dPhysicsSprite::create("ball.png");
-	float32 boxW = sprite->getContentSize().width/PTM_RATIO;
-
-	float32 x = box.x+box.w - boxW;
-	float32 y = box.y+box.h - boxW*2;
-	createBox(x, y);
-	x -= boxW;
-	createBox(x, y);
-
-	x -= boxW * 3;
-	createBox(x, y);
-	x -= boxW ;
-	createBox(x, y);
-	x -= boxW ;
-	createBox(x, y);
-	x -= boxW ;
-	createBox(x, y);
-
-	createBox(-10*PTM_RATIO + 90, (0.0f + PADDING_BOTTOM + 10)*PTM_RATIO);
-
-	
-// 	m_pMap = CCTMXTiledMap::create("map-1024x736.tmx");
-// 	map->setAnchorPoint(ccp(0.5, 0));
-// 	map->setPosition(ccp(box.x,box.y));
-// 	addChild(map, -1);
-
 	m_pMap = CCTMXTiledMap::create("map-1024x736.tmx");
-	//m_pMap->setAnchorPoint(ccp(0.5, 0));
-	//m_pMap->setPosition(ccp(box.x, box.y));
 	addChild(m_pMap, -1);
 
 	m_pGroup = m_pMap->objectGroupNamed("object");
@@ -183,7 +132,6 @@ void Box2dLayer::initMaze()
 			CCLOG("object x:%d, y:%d", x, y);
 		}
 	}
-
 }
 
 void Box2dLayer::initBall()
@@ -213,7 +161,7 @@ void Box2dLayer::initBall()
 	addChild(sprite);
 	sprite->setBody(body);
 	sprite->setPTMRatio(PTM_RATIO);
-	sprite->setPosition( ccp((m_width/2 - PADDING_RIGTH)*PTM_RATIO - half, (m_height - PADDING_TOP)*PTM_RATIO - half) );
+	sprite->setPosition( ccp(750, 410) );
 }
 
 void Box2dLayer::createBox(float x, float y)
